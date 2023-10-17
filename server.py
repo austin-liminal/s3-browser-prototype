@@ -61,14 +61,6 @@ def list_all_objects():
     while True:
         response = s3_client.list_objects_v2(**s3_params)
 
-        if 'CommonPrefixes' in response:
-            for item in response['CommonPrefixes']:
-                all_items.append({
-                    'Name': item['Prefix'],
-                    'Size': 0,
-                    'DateUpdated': None
-                })
-
         if 'Contents' in response:
             for item in response['Contents']:
                 all_items.append({
@@ -86,6 +78,7 @@ def list_all_objects():
 
     return jsonify({
         'Items': all_items,
+        'TotalCount': len(all_items),
         'NextContinuationToken': None
     })
 
